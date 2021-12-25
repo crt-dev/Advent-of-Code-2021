@@ -1,0 +1,1 @@
+self.increase_adjacent(before, str(self.root), value, "right")

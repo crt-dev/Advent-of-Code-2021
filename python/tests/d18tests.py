@@ -13,15 +13,17 @@ class d18tests(unittest.TestCase):
         self.assertEqual(expected_snum, str(snum))
         self.assertEqual(expected_magnitude, snum.magnitude())
 
-    def check_explode(self, input, expected, node_value):
+    def check_explode(self, input, expected):
         snum = SnailFishNumber(input)
-        node = [node for id, node in snum.register.items() if str(node) == node_value]
-        snum.explode(node[0])
+        snum.explode()
         self.assertEqual(expected, str(snum.root))
 
 
     def test_12(self):
         self.check_magnitude("[1,2]", 7)
+
+    def test_double_digit_input_supported(self):
+        self.check_magnitude("[10,10]", 50)
 
     def test_123_a(self):
         self.check_magnitude("[[1,2],3]", 27)
@@ -98,27 +100,27 @@ class d18tests(unittest.TestCase):
     def test_explode_1(self):
         input = "[[[[[9,8],1],2],3],4]"
         expected = "[[[[0,9],2],3],4]"
-        self.check_explode(input, expected, "[9,8]")
+        self.check_explode(input, expected)
 
     def test_explode_2(self):
-        input = "[7,[6,[5,[4,[3,2]]]]]"
+        input    = "[7,[6,[5,[4,[3,2]]]]]"
         expected = "[7,[6,[5,[7,0]]]]"
-        self.check_explode(input, expected, "[3,2]")
+        self.check_explode(input, expected)
 
     def test_explode_3(self):
         input = "[[6,[5,[4,[3,2]]]],1]"
         expected = "[[6,[5,[7,0]]],3]"
-        self.check_explode(input, expected, "[3,2]")
+        self.check_explode(input, expected)
 
     def test_explode_4(self):
-        input = "[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]"
+        input    = "[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]"
         expected = "[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]"
-        self.check_explode(input, expected, "[7,3]")
+        self.check_explode(input, expected)
 
     def test_explode_5(self):
         input = "[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]"
         expected = "[[3,[2,[8,0]]],[9,[5,[7,0]]]]"
-        self.check_explode(input, expected, "[3,2]")
+        self.check_explode(input, expected)
 
     def test_add_12345(self):
         input = ["[1,1]", "[2,2]", "[3,3]", "[4,4]", "[5,5]"]
@@ -129,3 +131,20 @@ class d18tests(unittest.TestCase):
         input = ["[1,1]", "[2,2]", "[3,3]", "[4,4]", "[5,5]", "[6,6]"]
         expected = "[[[[5,0],[7,4]],[5,5]],[6,6]]"
         self.check_addition(input, expected, 1137)
+
+    def test_increase_adjacent_right(self):
+        before = "[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]"
+        after  = "[[3,[2,[8,0]]],[6,[5,[4,[3,2]]]]]"
+        expected = "[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]"
+        snum = SnailFishNumber(before)
+        snum.increase_adjacent(before, after, 3, "right")
+        self.assertEqual(expected, str(snum))
+
+    def test_increase_adjacent_right_double_digit(self):
+        before = "[[3,[2,[1,[7,5]]]],[6,[5,[4,[3,2]]]]]"
+        after  = "[[3,[2,[8,0]]],[6,[5,[4,[3,2]]]]]"
+        expected = "[[3,[2,[8,0]]],[11,[5,[4,[3,2]]]]]"
+        snum = SnailFishNumber(before)
+        snum.increase_adjacent(before, after, 5, "right")
+        self.assertEqual(expected, str(snum))
+

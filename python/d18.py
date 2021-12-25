@@ -57,15 +57,17 @@ class SnailFishNumber:
         return "N" + str(self.id)
 
     def create(self, num_str):
-        num_str = num_str.replace(',', '')
+        self.register = {}
         nq = []
+        char_buffer = ""
         buffer = []
-
+        last_bracket = ""
         for n, c in enumerate(num_str):
             if c == '[' and len(nq) == 0:
                 self.root = Node(None, "root")
                 nq.append(self.root)
                 self.register["root"] = self.root
+                last_bracket = "["
             elif c == '[' and len(nq) != 0:
                 node = Node(None, self.get_new_id())
                 node.parent = nq[-1]
@@ -73,34 +75,39 @@ class SnailFishNumber:
                     nq[-1].x = buffer[0]
                     nq[-1].y = node
                     buffer = []
-                elif num_str[n-1] == ']':
+                    char_buffer = ""
+                elif last_bracket == ']':
                     nq[-1].y = node
                 else:
                     nq[-1].x = node
-
                 nq.append(node)
                 self.register[self.get_new_id()] = node
+                last_bracket = "["
             elif c == ']':
                 if len(buffer) == 2:
                     node = nq.pop()
                     node.x = buffer[0]
                     node.y = buffer[1]
                     buffer = []
+                    char_buffer = ""
                 elif len(buffer) == 1:
                     node = nq.pop()
                     node.y = buffer[0]
                     buffer = []
-                elif num_str[n-1] == ']':
-                    node = nq.pop()
+                    char_buffer = ""
+                elif last_bracket == ']':
+                    nq.pop()
+                last_bracket = "]"
+            else:
+                char_buffer += c
+                if "," in char_buffer:
+                    buffer = [int(n) for n in char_buffer.split(",") if n != ""]
 
-            elif c != ',':
-                buffer.append(int(c))
-
-        print("register = ", self.register)
-        print("result = ", self.root)
-        print("connectivity = ", )
-        for key, node in self.register.items():
-            print("{}: connectivity: {}".format(key, node.connectivity()))
+        # print("register = ", self.register)
+        # print("result = ", self.root)
+        # print("connectivity = ", )
+        # for key, node in self.register.items():
+        #     print("{}: connectivity: {}".format(key, node.connectivity()))
 
     def add(self, b):
         assert isinstance(b, SnailFishNumber)
@@ -111,6 +118,8 @@ class SnailFishNumber:
         new_root = Node(None, "root")
         new_root.x = self.root
         new_root.y = b_node
+        self.root.parent = new_root
+        b_node.parent = new_root
         self.root = new_root
         self.register["root"] = new_root
         self.register[new_root.x.id] = new_root.x
@@ -118,7 +127,7 @@ class SnailFishNumber:
         self.reduce()
 
     def reduce(self): #check the logic here
-        self.explode_all()
+        self.explode()
         x_nodes, y_nodes = self.get_nodes_2_split()
         for node in x_nodes:
             self.split_x(node)
@@ -127,34 +136,44 @@ class SnailFishNumber:
             self.split_y(node)
             self.explode()
 
-    def explode_all(self): #untested
-        nodes_2_explode = self.get_nodes_2_explode()
-        while (len(nodes_2_explode) != 0):
-            for node in nodes_2_explode:
-                self.explode(node)
+    def explode(self):
+        node = self.get_node_2_explode()
+        while node is not None:
+            parent = node.parent
+            before = str(self.root)
+            if node == parent.x:
+                parent.x = 0
+            elif node == parent.y:
+                parent.y = 0
+            self.increase_adjacent(before, str(self.root), node.x, "left") #this is bugged because it doesn't find the exact change position
+            self.increase_adjacent(before, str(self.root), node.y, "right")
+            node = self.get_node_2_explode()
 
-    def explode(self, node):
-        parent = node.parent
-        if node == parent.x:
-            parent.y += node.y
-            parent.x = 0
-            while parent is not None:
-                parent = parent.parent
-                if parent is not None and isinstance(parent.x, int):
-                    parent.x += node.x
+
+    def increase_adjacent(self, before, after, value, direction):
+        #do this via string as this is pretty difficult to do via binary tree
+        change_pos = None
+        for n, c in enumerate(after):
+            if c != before[n]:
+                change_pos = n
+                break
+
+        if change_pos is not None:
+            dir = 1 if direction == "right" else -1
+            # offset = 0 if direction == "left" else 2
+            # change_pos += offset
+
+            while 0 < change_pos < len(after) - 1:
+                change_pos += dir
+                char = after[change_pos]
+                isdigit = after[change_pos].isdigit()
+                if after[change_pos].isdigit():
+                    old_value = int(after[change_pos])
+                    assert after[change_pos + dir] in [']', ',', '['] #ie. not a double digit number
+                    new_value = str(old_value + value)
+                    after = after[:change_pos] + new_value + after[change_pos + 1:]
+                    self.create(after)
                     break
-        elif node == parent.y:
-            parent.x += node.x
-            parent.y = 0
-            while parent is not None:
-                parent = parent.parent
-                if isinstance(parent.y, int):
-                    parent.y += node.y
-                    break
-                if parent is None: #we're at root and havn't found the right most
-                    child
-
-
 
     def split_x(self, node):
         assert isinstance(node.x, int)
@@ -174,14 +193,18 @@ class SnailFishNumber:
 
     def get_depth(self, node):
         depth = 0
-        n = node
+        n = node.parent
         while n is not None:
             depth += 1
             n = n.parent
         return depth
 
-    def get_nodes_2_explode(self):
-        return [node for id, node in self.register.items() if self.get_depth(node) >= 5]
+    def get_node_2_explode(self):
+        ids = [(id, self.get_depth(node)) for id, node in self.register.items()]
+        nodes = [(node, self.get_depth(node)) for id, node in self.register.items()]
+        nodes = [node for node, depth in nodes if depth >= 4 and isinstance(node.x, int) and isinstance(node.y, int)]
+        return nodes[0] if len(nodes) >= 1 else None
+
 
     def get_nodes_2_split(self):
         x_nodes = [node for id, node in self.register.items() if isinstance(node.x, int) and node.x > 9]

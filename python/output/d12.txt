@@ -1,0 +1,41 @@
+
+
+
+
+
+
+
+
+
+completed route  2 :  ['start', 'b', 'd', 'b', 'A', 'c', 'A', 'end']
+completed route  3 :  ['start', 'b', 'd', 'b', 'A', 'end']
+completed route  1 :  ['start', 'b', 'd', 'b', 'end']
+completed route  4 :  ['start', 'b', 'end']
+
+
+
+
+completed route  5 :  ['start', 'b', 'A', 'c', 'A', 'end']
+completed route  6 :  ['start', 'b', 'A', 'c', 'A', 'b', 'end']
+completed route  7 :  ['start', 'b', 'A', 'c', 'A', 'b', 'A', 'end']
+completed route  8 :  ['start', 'b', 'A', 'end']
+completed route  9 :  ['start', 'b', 'A', 'b', 'end']
+
+completed route  10 :  ['start', 'b', 'A', 'b', 'A', 'c', 'A', 'end']
+completed route  11 :  ['start', 'b', 'A', 'b', 'A', 'end']
+
+completed route  12 :  ['start', 'A', 'c', 'A', 'end']
+completed route  13 :  ['start', 'A', 'c', 'A', 'b', 'end']
+completed route  14 :  ['start', 'A', 'c', 'A', 'b', 'A', 'end']
+completed route  15 :  ['start', 'A', 'end']
+completed route  16 :  ['start', 'A', 'b', 'd', 'b', 'end']
+completed route  17 :  ['start', 'A', 'b', 'd', 'b', 'A', 'c', 'A', 'end']
+completed route  18 :  ['start', 'A', 'b', 'd', 'b', 'A', 'end']
+completed route  19 :  ['start', 'A', 'b', 'end']
+completed route  20 :  ['start', 'A', 'b', 'A', 'c', 'A', 'end']
+completed route  21 :  ['start', 'A', 'b', 'A', 'c', 'A', 'b', 'end']
+completed route  22 :  ['start', 'A', 'b', 'A', 'c', 'A', 'b', 'A', 'end']
+completed route  23 :  ['start', 'A', 'b', 'A', 'end']
+completed route  24 :  ['start', 'A', 'b', 'A', 'b', 'end']
+completed route  25 :  ['start', 'A', 'b', 'A', 'b', 'A', 'c', 'A', 'end']
+completed route  26 :  ['start', 'A', 'b', 'A', 'b', 'A', 'end']
