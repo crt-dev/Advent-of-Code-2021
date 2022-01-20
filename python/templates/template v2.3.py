@@ -16,7 +16,7 @@ def solution(input):
     return answer
 
 example_input = get_input(example_file)
-exercise_input = get_input(exercise_file)
+#exercise_input = get_input(exercise_file)
 
 print(solution(example_input)) #
-print(solution(exercise_input)) #
+#print(solution(exercise_input)) #
