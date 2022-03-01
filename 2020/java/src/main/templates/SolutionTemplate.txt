@@ -1,0 +1,45 @@
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+
+@Data
+@AllArgsConstructor
+class Input {
+    public String left;
+    public String right;
+}
+
+public class Day7 {
+
+    private List<Input> input;
+
+    public void read(String fileName) throws IOException {
+        this.input = new ArrayList<>();
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream(String.format("%s.txt", fileName));
+        StringBuilder resultStringBuilder = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                resultStringBuilder.append(line).append("\n");
+                String[] elements = line.split(":");
+                input.add(new Input(elements[0], elements[1]));
+            }
+        }
+    }
+
+    public String solve() {
+        return "?";
+    }
+
+    public String solve2() {
+        return "?";
+    }
+}
