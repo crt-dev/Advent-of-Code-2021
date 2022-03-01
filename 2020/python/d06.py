@@ -1,4 +1,8 @@
-from collections import Counter
+from collections import Counter, defaultdict
+import numpy as np
+import math
+from pprint import pprint
+from itertools import permutations
 
 day = "06"
 exercise_file = r"..\data\d{0}.txt".format(day)
