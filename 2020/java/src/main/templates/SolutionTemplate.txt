@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Data
+@Builder
 @AllArgsConstructor
 class Input {
     public String left;
@@ -24,11 +24,9 @@ public class Day7 {
         this.input = new ArrayList<>();
         ClassLoader classLoader = getClass().getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(String.format("%s.txt", fileName));
-        StringBuilder resultStringBuilder = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = br.readLine()) != null) {
-                resultStringBuilder.append(line).append("\n");
                 String[] elements = line.split(":");
                 input.add(new Input(elements[0], elements[1]));
             }

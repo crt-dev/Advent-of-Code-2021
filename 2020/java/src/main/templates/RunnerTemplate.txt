@@ -8,14 +8,14 @@ public class D7Runner {
     private static String EXERCISE = "d07";
     private static String EXAMPLE = EXERCISE + "ex";
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         solve(EXAMPLE, 1);
-        solve(EXERCISE, 1);
-        solve(EXAMPLE, 2);
-        solve(EXERCISE, 2);
+        //solve(EXERCISE, 1);
+        //solve(EXAMPLE, 2);
+        //solve(EXERCISE, 2);
     }
 
-    public static void solve(String input, int part) throws IOException {
+    public static void solve(String input, int part) throws Exception {
         Day7 solution = new Day7();
         solution.read(input);
         var p1 = part == 1 ? solution.solve() : solution.solve2();
